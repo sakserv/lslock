@@ -11,16 +11,15 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.github.sakserv.lslock.cli;
+package com.github.sakserv.lslock.cli.parser;
 
-import com.github.sakserv.lslock.LockLister;
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-public class LockListerCliParser {
+public class LockListerCliParser extends AbstractCliParser {
 
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(LockListerCliParser.class);
@@ -36,37 +35,34 @@ public class LockListerCliParser {
         options.addOption("d", "directory", true, "directory to check for locked files");
     }
 
+    @Override
     public void parse() {
         CommandLineParser commandLineParser = new DefaultParser();
 
         try {
             CommandLine commandLine = commandLineParser.parse(options, args);
 
+            // Handle the help option
             if(commandLine.hasOption("h")) {
-                help();
+                help(options);
             }
 
+            // Handle the lock directory option
             if(commandLine.hasOption("d")) {
-                lockDirectory = new File(commandLine.getOptionValue("v"));
+                lockDirectory = new File(commandLine.getOptionValue("d"));
                 if(!lockDirectory.isDirectory()) {
                     LOG.error("The specified directory {} does not exist!", lockDirectory.getAbsolutePath());
-                    help();
+                    help(options);
                 }
             } else {
                 LOG.error("The directory option is required");
-                help();
+                help(options);
             }
 
         } catch (ParseException e) {
             LOG.error("Failed to parse command line args");
-            help();
+            help(options);
         }
-    }
-
-    public void help() {
-        HelpFormatter helpFormatter = new HelpFormatter();
-        helpFormatter.printHelp("Main", options);
-        System.exit(1);
     }
 
     public File getLockDirectory() {

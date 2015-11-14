@@ -42,6 +42,7 @@
         <slf4j.version>1.7.10</slf4j.version>
         <junit.version>4.11</junit.version>
         <commons-cli.version>1.3.1</commons-cli.version>
+        <commons-io.version>2.4</commons-io.version>
  
         <!-- Maven Plugins -->
         <maven-surefire-plugin.version>2.19</maven-surefire-plugin.version>
@@ -51,6 +52,7 @@
         <maven-scm-provider-gitexe.version>1.9.2</maven-scm-provider-gitexe.version>
         <maven-source-plugin.version>2.4</maven-source-plugin.version>
         <maven-javadoc-plugin.version>2.10.3</maven-javadoc-plugin.version>
+        <docker-maven-plugin.version>0.3.4</docker-maven-plugin.version>
 
     </properties>
 
@@ -82,6 +84,11 @@
             <groupId>commons-cli</groupId>
             <artifactId>commons-cli</artifactId>
             <version>${commons-cli.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -147,6 +154,24 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
                 <version>${maven-release-plugin.version}</version>
                 <configuration>
@@ -192,6 +217,50 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>${docker-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <imageName>${project.name}</imageName>
+                    <baseImage>java</baseImage>
+                    <entryPoint>["/entrypoint-wrapper.sh", "/${project.build.finalName}-jar-with-dependencies.jar" ]</entryPoint>
+                    <runs>
+                        <run>["/entrypoint-wrapper.sh", "/${project.build.finalName}-jar-with-dependencies.jar"]</run>
+                    </runs>
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>
+                            <include>${project.build.finalName}-jar-with-dependencies.jar</include>
+                        </resource>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}/../bin</directory>
+                            <include>lslock</include>
+                        </resource>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}/../bin</directory>
+                            <include>lslock-test</include>
+                        </resource>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}/../bin</directory>
+                            <include>entrypoint-wrapper.sh</include>
+                        </resource>
+                    </resources>
+                </configuration>
             </plugin>
 
         </plugins>

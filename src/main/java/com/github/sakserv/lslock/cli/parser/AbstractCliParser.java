@@ -1,4 +1,3 @@
-package com.github.sakserv.lslock;
 /*
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -12,13 +11,18 @@ package com.github.sakserv.lslock;
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+package com.github.sakserv.lslock.cli.parser;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
 
-public class LslockTest {
+public abstract class AbstractCliParser {
 
-    // Logger
-    private static final Logger LOG = LoggerFactory.getLogger(LslockTest.class);
+    public void help(Options options) {
+        HelpFormatter helpFormatter = new HelpFormatter();
+        helpFormatter.printHelp("Main", options);
+        System.exit(1);
+    }
 
+    public abstract void parse();
 }

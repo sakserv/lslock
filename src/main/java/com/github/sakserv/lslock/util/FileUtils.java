@@ -24,33 +24,6 @@ public class FileUtils {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(FileUtils.class);
 
     /**
-     * Recursively delete the directory
-     * @param directory
-     */
-    public static void deleteDirectory(File directory) {
-        String directoryAbsPath = directory.getAbsolutePath();
-
-        LOG.info("FILEUTILS: Deleting contents of directory: {}", directoryAbsPath);
-
-        File[] files = directory.listFiles();
-        if(files!=null) { //some JVMs return null for empty dirs
-            for(File f: files) {
-                if(f.isDirectory()) {
-                    f.setWritable(true);
-                    deleteDirectory(f);
-                } else {
-                    LOG.info("FILEUTILS: Deleting file: {}", f.getAbsolutePath());
-                    f.setWritable(true);
-                    f.delete();
-                }
-            }
-        }
-        LOG.info("FILEUTILS: Deleting file: {}", directory.getAbsolutePath());
-        directory.setWritable(true);
-        directory.delete();
-    }
-
-    /**
      * Create an empty file at the specified path
      * @param filePath      File object representing the path to the file to be created
      * @throws IOException      If the file cannot be created, throw IOException
@@ -58,6 +31,7 @@ public class FileUtils {
     public static void createEmptyFile(File filePath) throws IOException {
         filePath.getParentFile().mkdirs();
         filePath.createNewFile();
+        filePath.setWritable(true);
     }
 
 }

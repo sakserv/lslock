@@ -13,9 +13,14 @@
  */
 package com.github.sakserv.lslock.util;
 
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 
 public class CompatUtils {
+
+    // Logger
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(CompatUtils.class);
 
     private static final File procLocksPath = new File("/proc/locks");
 
@@ -43,6 +48,21 @@ public class CompatUtils {
             return true;
         }
         return false;
+    }
+
+    public static boolean runCompatChecks() {
+        // Validate running on Linux
+        if(!CompatUtils.isLinux()) {
+            LOG.error("Only Linux is supported");
+            return false;
+        }
+
+        // Validate that /proc/locks exists
+        if(!CompatUtils.procLocksExists()) {
+            LOG.error("/proc/locks does not exist, fatal error");
+            return false;
+        }
+        return true;
     }
 
 }

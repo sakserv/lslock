@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+jar="$1"
+
+java -cp $jar com.github.sakserv.lslock.cli.LockTakerCli -d /tmp/lslock-test
