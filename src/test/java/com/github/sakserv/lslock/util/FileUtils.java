@@ -27,7 +27,7 @@ public class FileUtils {
      * Recursively delete the directory
      * @param directory
      */
-    public static void deleteFolder(File directory) {
+    public static void deleteDirectory(File directory) {
         String directoryAbsPath = directory.getAbsolutePath();
 
         LOG.info("FILEUTILS: Deleting contents of directory: {}", directoryAbsPath);
@@ -37,7 +37,7 @@ public class FileUtils {
             for(File f: files) {
                 if(f.isDirectory()) {
                     f.setWritable(true);
-                    deleteFolder(f);
+                    deleteDirectory(f);
                 } else {
                     LOG.info("FILEUTILS: Deleting file: {}", f.getAbsolutePath());
                     f.setWritable(true);
