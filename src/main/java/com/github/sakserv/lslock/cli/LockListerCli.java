@@ -74,12 +74,7 @@ public class LockListerCli {
             // List the locks
             printLocks(lockListerCliParser.getLockDirectory(), procLocksContents);
 
-            // Sleep 5 seconds
-            Thread.sleep(5000l);
-
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
