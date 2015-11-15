@@ -29,8 +29,8 @@ bin/lslock-test target/lslock-test*jar-with-dependencies.jar &
 bin/lslock target/lslock-*jar-with-dependencies.jar
 ```
 
-Usage
------
+Usage Options
+-------------
 * lslock
 ```
 # java -cp target/lslock-0.0.1-SNAPSHOT-jar-with-dependencies.jar com.github.sakserv.lslock.cli.LockListerCli
