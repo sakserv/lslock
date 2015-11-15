@@ -43,6 +43,8 @@ public class LockTakerCliParser extends AbstractCliParser {
         options.addOption("d", "directory", true, "directory to lock files in");
         options.addOption("l", "lockcount", true, "number of files to lock");
         options.addOption("s", "sleeptimer", true, "how long to sleep after taking the lock");
+
+        parse();
     }
 
     /**

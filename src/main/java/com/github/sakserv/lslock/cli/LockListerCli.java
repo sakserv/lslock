@@ -45,6 +45,7 @@ public class LockListerCli {
     // as <inode, pid>
     private static HashMap<Integer, Integer> procLocksContents = new HashMap<>();
 
+
     /**
      * Main driver
      * @param args      Command line args
@@ -62,17 +63,16 @@ public class LockListerCli {
         // Parse the command line args
         LockListerCliParser lockListerCliParser = new LockListerCliParser(args);
 
-        // Get the lock directory
-        File lockDirectory = lockListerCliParser.getLockDirectory();
-
         // List the locks
         try {
 
             // Load /proc/locks
-            parseProcLocks();
+            // The hashmap provides the contents of /proc/locks
+            // as <inode, pid>
+            HashMap<Integer, Integer> procLocksContents = parseProcLocks();
 
             // List the locks
-            printLocks(lockListerCliParser.getLockDirectory());
+            printLocks(lockListerCliParser.getLockDirectory(), procLocksContents);
 
             // Sleep 5 seconds
             Thread.sleep(5000l);
@@ -92,11 +92,10 @@ public class LockListerCli {
      * @param lockDirectory     Directory to recurse for lock files
      * @throws IOException      If the lockdirectory is missing
      */
-    public static void printLocks(File lockDirectory) throws IOException {
+    public static void printLocks(File lockDirectory, HashMap<Integer, Integer> procLocksContents) throws IOException {
         System.out.printf("%-15s %15s %n", "PID", "PATH");
 
         for(File file: FileUtils.listFiles(lockDirectory, null, true)) {
-            //LOG.debug("FILE: {} - Inode: {} - Pid: {}", file, getInode(file), procLocksContents.get(getInode(file)));
             System.out.printf("%-15s %15s %n", procLocksContents.get(getInode(file)), file);
         }
         System.out.println();
@@ -122,9 +121,16 @@ public class LockListerCli {
      *
      * @throws IOException      if /proc/locks doesn't exist
      */
-    public static void parseProcLocks() throws IOException {
+    public static HashMap<Integer, Integer> parseProcLocks() throws IOException {
 
+        // The hashmap provides the contents of /proc/locks
+        // as <inode, pid>
+        HashMap<Integer, Integer> procLocksContents = new HashMap<>();
+
+        // Clear the HashMap
         procLocksContents.clear();
+
+        // Read /proc/locks, load the HashMap
         try(BufferedReader br = new BufferedReader(new FileReader(new File("/proc/locks")))) {
             for(String line; (line = br.readLine()) != null; ) {
                 String[] lineSplit = line.split("\\s+");
@@ -134,6 +140,8 @@ public class LockListerCli {
                 procLocksContents.put(inode, pid);
             }
         }
+
+        return procLocksContents;
 
     }
 }

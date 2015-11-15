@@ -64,10 +64,6 @@ public class LockListerCliParser extends AbstractCliParser {
             // Handle the lock directory option
             if(commandLine.hasOption("d")) {
                 lockDirectory = new File(commandLine.getOptionValue("d"));
-                if(!lockDirectory.isDirectory()) {
-                    LOG.error("The specified directory {} does not exist!", lockDirectory.getAbsolutePath());
-                    help(options);
-                }
             } else {
                 LOG.error("The directory option is required");
                 help(options);

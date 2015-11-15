@@ -85,6 +85,4 @@ public class LockTakerCli {
         sb.append(".lock");
         return new File(sb.toString());
     }
-
-
-    }
+}
