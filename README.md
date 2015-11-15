@@ -32,6 +32,24 @@ bin/lslock target/lslock-*jar-with-dependencies.jar
 Usage
 -----
 * lslock
+```
+# java -cp target/lslock-0.0.1-SNAPSHOT-jar-with-dependencies.jar com.github.sakserv.lslock.cli.LockListerCli
+[main] ERROR com.github.sakserv.lslock.cli.parser.LockListerCliParser - The directory option is required
+usage: lslock
+ -d,--directory <arg>   directory to check for locked files
+ -h,--help              show help.
+```
+
+* lslock-test
+```
+# java -cp target/lslock-0.0.1-SNAPSHOT-jar-with-dependencies.jar com.github.sakserv.lslock.cli.LockTakerCli
+  [main] ERROR com.github.sakserv.lslock.cli.parser.LockTakerCliParser - The directory option is required
+  usage: lslock-test
+   -d,--directory <arg>    directory to lock files in
+   -h,--help               show help.
+   -l,--lockcount <arg>    number of files to lock
+   -s,--sleeptimer <arg>   how long to sleep after taking the lock
+```
 
 
 Example using Docker
