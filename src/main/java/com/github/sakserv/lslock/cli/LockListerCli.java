@@ -98,7 +98,7 @@ public class LockListerCli {
             System.out.println("No locks found for " + lockDirectory);
         } else {
             // Setup the header
-            System.out.printf("%-15s %15s %n", "PID", "PATH");
+            System.out.printf("%-15s %-5s %n", "PID", "PATH");
 
             // Iterative the files and print the PID and PATH for the lock
             for (File file : fileList) {

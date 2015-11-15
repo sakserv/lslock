@@ -22,9 +22,9 @@ import org.apache.commons.cli.Options;
  */
 public abstract class AbstractCliParser {
 
-    public void help(Options options) {
+    public void help(Options options, String name) {
         HelpFormatter helpFormatter = new HelpFormatter();
-        helpFormatter.printHelp("Main", options);
+        helpFormatter.printHelp(name, options);
         System.exit(1);
     }
 

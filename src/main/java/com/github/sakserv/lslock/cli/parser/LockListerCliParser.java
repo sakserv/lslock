@@ -31,6 +31,7 @@ public class LockListerCliParser extends AbstractCliParser {
     private String[] args;
     private Options options = new Options();
     private File lockDirectory;
+    private static final String NAME = "lslock";
 
     /**
      * Sets the command line args and parses
@@ -58,7 +59,7 @@ public class LockListerCliParser extends AbstractCliParser {
 
             // Handle the help option
             if(commandLine.hasOption("h")) {
-                help(options);
+                help(options, NAME);
             }
 
             // Handle the lock directory option
@@ -66,12 +67,12 @@ public class LockListerCliParser extends AbstractCliParser {
                 lockDirectory = new File(commandLine.getOptionValue("d"));
             } else {
                 LOG.error("The directory option is required");
-                help(options);
+                help(options, NAME);
             }
 
         } catch (ParseException e) {
             LOG.error("Failed to parse command line args");
-            help(options);
+            help(options, NAME);
         }
     }
 

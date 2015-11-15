@@ -30,6 +30,7 @@ public class LockTakerCliParser extends AbstractCliParser {
     private File lockDirectory;
     private int lockCount;
     private int sleepTimer;
+    private static final String NAME = "lslock-test";
 
     /**
      * Sets the command line args and parses
@@ -60,7 +61,7 @@ public class LockTakerCliParser extends AbstractCliParser {
 
             // Handle the help option
             if (commandLine.hasOption("h")) {
-                help(options);
+                help(options, NAME);
             }
 
             // Handle the directory
@@ -68,7 +69,7 @@ public class LockTakerCliParser extends AbstractCliParser {
                 lockDirectory = new File(commandLine.getOptionValue("d"));
             } else {
                 LOG.error("The directory option is required");
-                help(options);
+                help(options, NAME);
             }
 
             // Handle the lock file count option
@@ -87,7 +88,7 @@ public class LockTakerCliParser extends AbstractCliParser {
 
         } catch (ParseException e) {
             LOG.error("Failed to parse command line args");
-            help(options);
+            help(options, NAME);
         }
     }
 

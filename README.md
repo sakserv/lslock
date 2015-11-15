@@ -1,6 +1,6 @@
 lslock
 ------
-lslock provides a means of viewing the processes associated with file locks leveraging /proc/locks on Linux.
+lslock provides a means of viewing the process id's associated with file locks leveraging /proc/locks on Linux.
 
 Requirements
 ------------
@@ -8,9 +8,9 @@ Tested with:
 * Java 8
 * docker 1.9.0
 
-Using on Linux
+Standalone Usage
 -----
-As a result of the /proc/locks requirement, this is not portable.
+As a result of the /proc/locks requirement, this is not portable beyond linux.
 
 * Install docker
 ```
@@ -24,9 +24,15 @@ cd lslock && mvn clean package
 
 * Run the script
 ```
-cd lslock && bin/lslock-test target/lslock-test*jar-with-dependencies.jar &
-cd lslock && bin/lslock-test target/lslock-*jar-with-dependencies.jar
+cd lslock
+bin/lslock-test target/lslock-test*jar-with-dependencies.jar &
+bin/lslock target/lslock-*jar-with-dependencies.jar
 ```
+
+Usage
+-----
+* lslock
+
 
 Example using Docker
 -------
