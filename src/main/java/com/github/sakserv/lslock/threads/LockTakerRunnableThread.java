@@ -64,6 +64,7 @@ public class LockTakerRunnableThread implements Runnable {
             fileLock.release();
             fileChannel.close();
             randomAccessFile.close();
+            filePath.delete();
 
         } catch(IOException e) {
             if(!filePath.isFile()) {

@@ -88,9 +88,18 @@ public class LockListerCli {
      * @throws IOException      If the lockdirectory is missing
      */
     public static void printLocks(File lockDirectory, HashMap<Integer, Integer> procLocksContents) throws IOException {
+
+        // If not locks are found, output no locks found
+        if(procLocksContents.isEmpty()) {
+            System.out.println("No locks found in " + lockDirectory);
+        }
+
+        // Setup the header
         System.out.printf("%-15s %15s %n", "PID", "PATH");
 
+        // Iterative the files and print the PID and PATH for the lock
         for(File file: FileUtils.listFiles(lockDirectory, null, true)) {
+            int inode = procLocksContents.get(getInode(file));
             System.out.printf("%-15s %15s %n", procLocksContents.get(getInode(file)), file);
         }
         System.out.println();

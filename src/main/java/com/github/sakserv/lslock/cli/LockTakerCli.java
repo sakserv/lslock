@@ -72,6 +72,7 @@ public class LockTakerCli {
         LOG.debug("All LockTaker Threads Started");
         // Shutdown the thread pool
         executorService.shutdown();
+
     }
 
     public static File getLockFilePath(File lockDirectory, int i) {
