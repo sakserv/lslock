@@ -34,7 +34,6 @@ public class LockTakerCli {
 
         // Parse the command line args
         LockTakerCliParser lockTakerCliParser = new LockTakerCliParser(args);
-        lockTakerCliParser.parse();
 
         // Set up variables
         File lockDirectory = lockTakerCliParser.getLockDirectory();

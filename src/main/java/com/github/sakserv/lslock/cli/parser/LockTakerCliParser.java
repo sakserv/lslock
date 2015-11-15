@@ -24,12 +24,18 @@ public class LockTakerCliParser extends AbstractCliParser {
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(LockTakerCliParser.class);
 
+    // Properties
     private String[] args;
     private Options options = new Options();
     private File lockDirectory;
     private int lockCount;
     private int sleepTimer;
 
+    /**
+     * Sets the command line args and parses
+     * those that were passed in.
+     * @param args      Command line arguments
+     */
     public LockTakerCliParser(String[] args) {
         this.args = args;
 
@@ -39,6 +45,9 @@ public class LockTakerCliParser extends AbstractCliParser {
         options.addOption("s", "sleeptimer", true, "how long to sleep after taking the lock");
     }
 
+    /**
+     * Parses the passed in command line arguments
+     */
     @Override
     public void parse() {
 

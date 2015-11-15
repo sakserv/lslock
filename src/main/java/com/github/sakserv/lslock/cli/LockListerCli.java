@@ -27,13 +27,28 @@ import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 
+/**
+ * CLI and main driver for the LockLister
+ * Reads /proc/locks and the files in the supplied
+ * directory and joins them on inode.
+ *
+ * The final output contains the pid of the process
+ * that is holding on to the file based lock
+ */
 public class LockListerCli {
 
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(LockListerCli.class);
 
+    // Properties
+    // The hashmap provides the contents of /proc/locks
+    // as <inode, pid>
     private static HashMap<Integer, Integer> procLocksContents = new HashMap<>();
 
+    /**
+     * Main driver
+     * @param args      Command line args
+     */
     public static void main(String[] args) {
 
         LOG.debug("Starting the LockLister");
@@ -46,7 +61,6 @@ public class LockListerCli {
 
         // Parse the command line args
         LockListerCliParser lockListerCliParser = new LockListerCliParser(args);
-        lockListerCliParser.parse();
 
         // Get the lock directory
         File lockDirectory = lockListerCliParser.getLockDirectory();
@@ -72,6 +86,12 @@ public class LockListerCli {
         LOG.debug("LockLister finished");
     }
 
+    /**
+     * Prints the final output for the locks
+     *
+     * @param lockDirectory     Directory to recurse for lock files
+     * @throws IOException      If the lockdirectory is missing
+     */
     public static void printLocks(File lockDirectory) throws IOException {
         System.out.printf("%-15s %15s %n", "PID", "PATH");
 
@@ -82,6 +102,13 @@ public class LockListerCli {
         System.out.println();
     }
 
+    /**
+     * Returns the inode of the supplied File
+     *
+     * @param lockFile      Retrieve inode for this File
+     * @return      The inode of the supplied lockFile
+     * @throws IOException      If the File can not be found
+     */
     public static int getInode(File lockFile) throws IOException {
         BasicFileAttributes basicFileAttributes = Files.readAttributes(lockFile.toPath(),BasicFileAttributes.class);
         Object fileKey = basicFileAttributes.fileKey();
@@ -90,6 +117,11 @@ public class LockListerCli {
                 fileAttrString.indexOf(")")));
     }
 
+    /**
+     * Loads the procLocksConents HashMap with <inode,pid>
+     *
+     * @throws IOException      if /proc/locks doesn't exist
+     */
     public static void parseProcLocks() throws IOException {
 
         procLocksContents.clear();

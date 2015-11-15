@@ -22,6 +22,7 @@ public class CompatUtils {
     // Logger
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(CompatUtils.class);
 
+    // Properties
     private static final File procLocksPath = new File("/proc/locks");
 
     /**
@@ -50,6 +51,10 @@ public class CompatUtils {
         return false;
     }
 
+    /**
+     * Run the consolidated list of compatibility tests
+     * @return      true if compatible, false if not
+     */
     public static boolean runCompatChecks() {
         // Validate running on Linux
         if(!CompatUtils.isLinux()) {

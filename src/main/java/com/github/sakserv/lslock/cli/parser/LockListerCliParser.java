@@ -19,22 +19,36 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
+/**
+ * CLI Parser for the @LockListCli
+ */
 public class LockListerCliParser extends AbstractCliParser {
 
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(LockListerCliParser.class);
 
+    // Properties
     private String[] args;
     private Options options = new Options();
     private File lockDirectory;
 
+    /**
+     * Sets the command line args and parses
+     * those that were passed in.
+     * @param args      Command line arguments
+     */
     public LockListerCliParser(String[] args) {
         this.args = args;
 
         options.addOption("h", "help", false, "show help.");
         options.addOption("d", "directory", true, "directory to check for locked files");
+
+        parse();
     }
 
+    /**
+     * Parses the passed in command line arguments
+     */
     @Override
     public void parse() {
         CommandLineParser commandLineParser = new DefaultParser();
@@ -65,6 +79,10 @@ public class LockListerCliParser extends AbstractCliParser {
         }
     }
 
+    /**
+     * Returns the lock directory File
+     * @return      The lock directory File
+     */
     public File getLockDirectory() {
         return lockDirectory;
     }

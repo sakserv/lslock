@@ -27,14 +27,23 @@ public class LockTakerRunnableThread implements Runnable {
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(LockTakerRunnableThread.class);
 
+    // Properties
     private File filePath;
     private int sleepTimer = 0;
 
+    /**
+     * Sets the file path and amount of time to sleep with the lock
+     * @param filePath      path to the file to lock on
+     * @param sleepTimer    how long to sleep with the lock
+     */
     public LockTakerRunnableThread(File filePath, int sleepTimer) {
         this.filePath = filePath;
         this.sleepTimer = sleepTimer;
     }
 
+    /**
+     * Get the lock, sleep, release the lock
+     */
     @Override
     public void run() {
 
@@ -43,14 +52,19 @@ public class LockTakerRunnableThread implements Runnable {
             RandomAccessFile randomAccessFile = new RandomAccessFile(filePath, "rw");
             FileChannel fileChannel = randomAccessFile.getChannel();
 
+            // Take the lock on the whole file
             LOG.debug("Taking on lock for {} ms on {}", sleepTimer, filePath);
             FileLock fileLock = fileChannel.lock(0, Long.MAX_VALUE, true);
+
+            // Sleep the desired amount of time
             Thread.sleep(sleepTimer);
 
+            // Release the lock and clean up
             LOG.debug("Releasing lock on {}", filePath);
             fileLock.release();
             fileChannel.close();
             randomAccessFile.close();
+
         } catch(IOException e) {
             if(!filePath.isFile()) {
                 LOG.error("File to lock was not found: {}", filePath);
@@ -62,8 +76,6 @@ public class LockTakerRunnableThread implements Runnable {
             LOG.error("Thread interrupted");
             e.printStackTrace();
         }
-
-        filePath.delete();
     }
 
 }

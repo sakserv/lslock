@@ -16,6 +16,10 @@ package com.github.sakserv.lslock.cli.parser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 
+/**
+ * Abstract class that provides the help
+ * method, requires parse
+ */
 public abstract class AbstractCliParser {
 
     public void help(Options options) {
