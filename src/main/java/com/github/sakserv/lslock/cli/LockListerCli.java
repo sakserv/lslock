@@ -25,7 +25,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * CLI and main driver for the LockLister
@@ -89,18 +91,19 @@ public class LockListerCli {
      */
     public static void printLocks(File lockDirectory, HashMap<Integer, Integer> procLocksContents) throws IOException {
 
+        Collection<File> fileList = FileUtils.listFiles(lockDirectory, null, true);
+
         // If not locks are found, output no locks found
-        if(procLocksContents.isEmpty()) {
-            System.out.println("No locks found in " + lockDirectory);
-        }
+        if(procLocksContents.isEmpty() || fileList.isEmpty()) {
+            System.out.println("No locks found for " + lockDirectory);
+        } else {
+            // Setup the header
+            System.out.printf("%-15s %15s %n", "PID", "PATH");
 
-        // Setup the header
-        System.out.printf("%-15s %15s %n", "PID", "PATH");
-
-        // Iterative the files and print the PID and PATH for the lock
-        for(File file: FileUtils.listFiles(lockDirectory, null, true)) {
-            int inode = procLocksContents.get(getInode(file));
-            System.out.printf("%-15s %15s %n", procLocksContents.get(getInode(file)), file);
+            // Iterative the files and print the PID and PATH for the lock
+            for (File file : fileList) {
+                System.out.printf("%-15s %15s %n", procLocksContents.get(getInode(file)), file);
+            }
         }
         System.out.println();
     }
